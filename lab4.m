@@ -44,7 +44,7 @@ play = 1;
 updatePins
 while (play)
    %check all buttons are null
-   while ~(STEN1 && SAX1 && PASE1 && STEN2 && SAX2 && PASE2)
+   while (STEN1 || SAX1 || PASE1 || STEN2 || SAX2 || PASE2)
        updatePins
    end
    %get ready
