@@ -38,33 +38,57 @@ score = zeros(2,2);
 %PASE1 = digitalRead(a,pinPASE1); 
 %PASE2 = digitalRead(a,pinPASE2);
 
-%test1 = disp(hej);
-
 play = 1;
 
 %while not all buttons are pressed
-%while (play)
- %  while ~(STEN1 && SAX1 && PASE1 && STEN2 && SAX2 && PASE2)
-  % end
+updatePins
+while (play)
+   %check all buttons are null
+   while ~(STEN1 && SAX1 && PASE1 && STEN2 && SAX2 && PASE2)
+       updatePins
+   end
+   %get ready
+   blink3Times
    
-%end
-counter = 0;
-while(play)
-    disp (x);
-    foo1
-    foo2
-    counter = counter + 1;
-    if (counter == 5)
-        play = 0;
-    end
+   %check if both players have made choices
+   while ~((STEN1 || SAX1 || PASE1) && (STEN2 || SAX2 || PASE2))
+       updatePins
+   end
+   
+   
+   if(checkCheating)
+       if(FUSK1 && FUSK2)
+           %set both players score to zero
+           score(1,1) = 0;
+           score(2,2) = 0;
+       elseif(FUSK1)
+           score(2,2) = score(2,2) + 1;
+       else
+           score(1,1) = score(1,1) + 1;
+       end
+
+   %player1 wins round    
+   elseif(bla)
+       
+   %player2 wins round    
+   elseif(bla)
+   
+   %draw
+   else
+       
+   end
+   
+   
 end
 
-    function foo1
-        static x = 0;
+    function output = checkCheating
+    %returns true if someone cheated
+        FUSK1 = STEN1 && (SAX1 || PASE1) || (SAX1 && PASE1);
+        FUSK2 = STEN2 && (SAX2 || PASE2) || (SAX2 && PASE2);
+        output = FUSK1 || FUSK2;
     end
-    function foo2
-        x = x + 10;
-    end
+
+    
 
 function updatePins
     STEN1 = digitalRead(a,pinSTEN1);
@@ -73,9 +97,30 @@ function updatePins
     SAX2 = digitalRead(a,pinSAX2);
     PASE1 = digitalRead(a,pinPASE1); 
     PASE2 = digitalRead(a,pinPASE2);
+    if(STEN1 && STEN2 && SAX1 && SAX2 && PASE1 && PASE2)
+        play = 0;
+    end
     
 end
 
+function blink3Times
+%let lamps blink 3 times
+    for k = 1:3
+    digitalWrite(a,pinL1,1);    %lights on
+    digitalWrite(a,pinL2,1);
+
+        if(k < 3)
+            pause(1);   
+            digitalWrite(a,pinL1,0); %lights off
+            digitalWrite(a,pinL2,0);    
+            pause(1);
+        end
+    end
 end
+
+
+end
+
+
 
 
