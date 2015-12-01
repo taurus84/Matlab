@@ -28,16 +28,15 @@ playerAndScore{1,1} = input('Player1 name: ','s');
 playerAndScore{2,1} = input('Player2 name: ','s');
 playerAndScore{1,2} = 0;
 playerAndScore{2,2} = 0;
-%counter = 0;
 
-%checking status on buttons
-STEN1 = digitalRead(a,pinSTEN1);
-STEN2 = digitalRead(a,pinSTEN2);
-SAX1 = digitalRead(a,pinSAX1);
-SAX2 = digitalRead(a,pinSAX2);
-PASE1 = digitalRead(a,pinPASE1); 
-PASE2 = digitalRead(a,pinPASE2);
+% A matrix holding score history
+matchRecord = zeros(3,100);
 
+% Make a match index and put it as a headline in matrix
+t = (1:200);
+matchRecord(1,:) = t;
+
+index = 1;
 play = 1;
 
 %while not all buttons are pressed
@@ -83,9 +82,15 @@ while (play)
    else
        disp('Game over');
    end
+   % Store score data in matchrecord
+   matchRecord(2,index) = playerAndScore(1,2);
+   matchRecord(3,index) = playerAndScore(2,2);
    
+   % Display match history and current score
+   disp(matchRecord(1:index));
    disp(playerAndScore);
    
+   index = index + 1;
 end
 
 function output = checkCheating
@@ -93,9 +98,7 @@ function output = checkCheating
     FUSK1 = STEN1 && (SAX1 || PASE1) || (SAX1 && PASE1);
     FUSK2 = STEN2 && (SAX2 || PASE2) || (SAX2 && PASE2);
     output = FUSK1 || FUSK2;
-end
-
-    
+end   
 
 function updatePins
     STEN1 = digitalRead(a,pinSTEN1);
