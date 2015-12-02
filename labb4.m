@@ -21,26 +21,26 @@ pinMode(a,pinSAX2,'INPUT');
 pinMode(a,pinPASE1,'INPUT');
 pinMode(a,pinPASE2,'INPUT');
 
-%create cells to hold players and score. 
-%pAs(1,1) is player 1 and score(2,2) is player 2
-playerAndScore = cell(2,2);
-playerAndScore{1,1} = input('Player1 name: ','s');
-playerAndScore{2,1} = input('Player2 name: ','s');
-playerAndScore{1,2} = 0;
-playerAndScore{2,2} = 0;
+%create 3x3 cells to hold players and score. 
+playerAndScore = cell(3,3);
+playerAndScore{2,1} = 'Last Round';
+playerAndScore{3,1} = 'Total Score';
+playerAndScore{1,2} = input('Player1 name: ','s');
+playerAndScore{1,3} = input('Player2 name: ','s');
+playerAndScore{2,2} = 0;               %Player 1 last round result
+playerAndScore{2,3} = 0;               %Player 2 last round result
+playerAndScore{3,2} = 0;               %Player 1 total score
+playerAndScore{3,3} = 0;               %Player 2 total score
 
-% A matrix holding score history
-matchRecord = zeros(3,100);
-
-% Make a match index and put it as a headline in matrix
-t = (1:200);
-matchRecord(1,:) = t;
-
-index = 1;
 play = 1;
+STEN1 = 0;
+SAX1 = 0;
+PASE1 = 0;
+STEN2 = 0;
+SAX2 = 0;
+PASE2 = 0;
 
-%while not all buttons are pressed
-updatePins
+disp('Wait for players...')
 while (play)
    %check all buttons are null
    while ((STEN1 || SAX1 || PASE1 || STEN2 || SAX2 || PASE2) && play)
@@ -58,40 +58,49 @@ while (play)
    if(checkCheating && play)
        if(FUSK1 && FUSK2)
            %set both players score to zero
-           playerAndScore{1,2} = 0;
-            playerAndScore{2,2} = 0;
+           playerAndScore{3,2} = 0;
+           playerAndScore{3,3} = 0;
+           %set last result, both cheated
+           playerAndScore{2,2} = 'Cheat';
+           playerAndScore{2,3} = 'Cheat';
        elseif(FUSK1)
-            playerAndScore{2,2} =  playerAndScore{2,2} + 1;
+            playerAndScore{3,3} = playerAndScore{3,3} + 1;
+            %set last result
+            playerAndScore{2,2} = 'Cheat';
+            playerAndScore{2,3} = 'Win';
        else
-           playerAndScore{1,2} =  playerAndScore{1,2} + 1;
+           playerAndScore{3,2} = playerAndScore{3,2} + 1;
+           %set last result
+           playerAndScore{2,2} = 'Win';
+           playerAndScore{2,3} = 'Cheat';
        end
 
    %player1 wins round    
    elseif(((STEN1 && SAX2) || (SAX1 && PASE2) || (PASE1 && STEN2)) && play)
-       playerAndScore{1,2} = playerAndScore{1,2} + 1;
-       disp('Winner is player1 ');
+       playerAndScore{3,2} = playerAndScore{3,2} + 1;
+       %set last result
+       playerAndScore{2,2} = 'Win';
+       playerAndScore{2,3} = 'Lose';
+       
    %player2 wins round    
    elseif(((STEN2 && SAX1) || (SAX2 && PASE1) || (PASE2 && STEN1)) && play)
-        playerAndScore{2,2} = playerAndScore{2,2} + 1;
-        disp('Winner is player1 ');
+        playerAndScore{3,3} = playerAndScore{3,3} + 1;
+        %set last result
+        playerAndScore{2,2} = 'Lose';
+        playerAndScore{2,3} = 'Win';
    %draw
    elseif(play)
        %do nothing
-       disp('Round was TIE');
-       
-   else
-       disp('Game over');
+       %set last result
+       playerAndScore{2,2} = 'Tie';
+       playerAndScore{2,3} = 'Tie';
    end
-   % Store score data in matchrecord
-   matchRecord(2,index) = playerAndScore(1,2);
-   matchRecord(3,index) = playerAndScore(2,2);
    
    % Display match history and current score
-   disp(matchRecord(1:index));
    disp(playerAndScore);
-   
-   index = index + 1;
 end
+disp('GAME OVER');
+disp(playerAndScore);
 
 function output = checkCheating
 %returns true if someone cheated
