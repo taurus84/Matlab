@@ -1,4 +1,6 @@
 function labb4
+% Klassiska spelet sten, sax, påse. 
+% Till spelet behövs en Arduino Due och spelknappar. 
 
 pinL1       = 44;
 pinL2       = 45;

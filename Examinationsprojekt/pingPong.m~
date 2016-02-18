@@ -1,0 +1,21 @@
+%program allready connected to arduino, due to 'a' as argument
+%Before calling this function, one must use command:
+% a  = arduino_com('COMPORT')
+
+function [] = pingPong( a )
+    
+    LISTENING = 1;
+
+    % Read from I/O port
+    while(LISTENING)
+        
+        
+    end
+
+    while(?~LISTENING)
+    end
+
+
+
+end
+
