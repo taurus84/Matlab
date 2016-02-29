@@ -2,9 +2,9 @@
 
 function a = connectToArduino(COMPORT)
 
-    a = serial('COMXX', 'BaudRate', 9600); 
+    a = serial(COMPORT, 'BaudRate', 115200); 
     set(a, 'Terminator', 10);
-    fopen(s);
+    fopen(a);
 
 end
 
